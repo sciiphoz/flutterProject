@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'auth.dart';
-import 'reg.dart';
+import 'package:flutter_player/recovery.dart';
+import 'package:flutter_player/auth.dart';
+import 'package:flutter_player/reg.dart';
 
 void main() {
   runApp(const AppTheme());
@@ -34,7 +35,8 @@ class AppTheme extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => AuthPage(),
-        '/reg': (context) => RegPage()
+        '/reg': (context) => RegPage(),
+        '/recovery': (context) => RecoveryPage(),
       }
     );
   }

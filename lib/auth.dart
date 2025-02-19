@@ -74,7 +74,7 @@ class _AuthPageState extends State<AuthPage> {
               alignment: Alignment.centerRight,
               child: InkWell(
                 child: Text("Забыли пароль?",),
-                onTap: (){},
+                onTap: (){ Navigator.popAndPushNamed(context, '/recovery'); },
               ),
             ),
             SizedBox(
