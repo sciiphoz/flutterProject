@@ -49,17 +49,20 @@ class _MainPageState extends State<MainPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            Scrollbar(
-              child: AboutDialog()
-            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(        
+        color: Colors.blueGrey[600],
         child: Row
         (
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
+            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back, color: Colors.white, size: 40,)),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.2,
+            ),
+            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward, color: Colors.white, size: 40,)),
           ],
         ),
       ),

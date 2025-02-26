@@ -8,7 +8,8 @@ class RecoveryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Восстановление пароля"),
+        backgroundColor: Colors.blueGrey[600],
+        title: Text("Восстановление пароля", style: TextStyle(color: Colors.white,)),
         leading: IconButton(onPressed: (){
           Navigator.popAndPushNamed(context, '/');
         }, icon: Icon(CupertinoIcons.back, color: Colors.white)),
