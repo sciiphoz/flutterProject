@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_player/database/auth.dart';
+import 'package:flutter_player/footer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+  final List<Map<String, String>> playlists = [
+    {'title': 'Плейлист 1'},
+    {'title': 'Плейлист 2'},
+    {'title': 'Плейлист 3'},
+    {'title': 'Плейлист 4'},
+    {'title': 'Плейлист 5'},
+    {'title': 'Плейлист 6'},
+  ];
+
+  final List<Map<String, String>> artists = [
+    {'name': 'Исполнитель 1'},
+    {'name': 'Исполнитель 2'},
+    {'name': 'Исполнитель 3'},
+    {'name': 'Исполнитель 4'},
+    {'name': 'Исполнитель 5'},
+  ];
+
+class _HomePageState extends State<HomePage> {
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,23 +70,24 @@ class _MainPageState extends State<MainPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(        
-        color: Colors.blueGrey[600],
-        child: Row
-        (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back, color: Colors.white, size: 40,)),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.2,
-            ),
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward, color: Colors.white, size: 40,)),
+              
+            )
           ],
         ),
       ),
+      appBar: AppBar(
+        title: Text("Home", style: TextStyle(color: Colors.white),),
+        actions: [
+          IconButton(onPressed: () async {
+            await authService.logOut();
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isLoggedIn', false);
+            Navigator.popAndPushNamed(context, '/auth');
+          }, icon: Icon(Icons.logout, color: Colors.white,))
+        ],
+      ),
+      bottomNavigationBar: const Footer(), 
     );
   }
 }

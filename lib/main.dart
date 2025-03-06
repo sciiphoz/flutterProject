@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_player/landing.dart';
+import 'package:flutter_player/playlistpage.dart';
 import 'package:flutter_player/recovery.dart';
 import 'package:flutter_player/auth.dart';
 import 'package:flutter_player/reg.dart';
+import 'package:flutter_player/home.dart';
+import 'package:flutter_player/trackpage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_player/mainpage.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Supabase.initialize
+  await Supabase.initialize
   (
     url: 'https://rjnwjeopknvsrqsetrsf.supabase.co', 
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqbndqZW9wa252c3Jxc2V0cnNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzODAyMTksImV4cCI6MjA1NTk1NjIxOX0.Pya-1YGfYitWolWGAhs9a50LjqTdKbAKzt5WCCxXEkA'
@@ -43,10 +46,13 @@ class AppTheme extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => AuthPage(),
+        '/': (context) => LandingPage(),
+        '/auth': (context) => AuthPage(),
         '/reg': (context) => RegPage(),
         '/recovery': (context) => RecoveryPage(),
-        '/main': (context) => MainPage(),
+        '/main': (context) => HomePage(),
+        '/track': (context) => TrackPage(),
+        '/playlists': (context) => PlaylistPage(),
       }
     );
   }

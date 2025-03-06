@@ -1,11 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_player/database/auth.dart';
 
 class RecoveryPage extends StatelessWidget {
   const RecoveryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController emailController = TextEditingController();
+    AuthService authService = AuthService(); 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[600],
@@ -21,6 +26,8 @@ class RecoveryPage extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
               child: TextField(
+                style: TextStyle(color: Colors.white),
+                controller: emailController,
                 cursorColor: Colors.white,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
@@ -28,7 +35,14 @@ class RecoveryPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   suffixIcon: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (emailController.text.isEmpty) {
+                        print("Поле пустое.");
+                      } else {
+                        await authService.recoveryPassword(emailController.text);
+                        emailController.clear();
+                      }
+                    },
                     icon: Icon(
                       Icons.send,
                       color: Colors.white,

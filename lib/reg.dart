@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_player/database/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegPage extends StatefulWidget 
 {
@@ -9,6 +11,10 @@ class RegPage extends StatefulWidget
 }
 
 class _RegPageState extends State<RegPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController repeatController = TextEditingController();
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +33,8 @@ class _RegPageState extends State<RegPage> {
               child: Column(
                 children: [
                   TextField(
+                    style: TextStyle(color: Colors.white),
+                    controller: emailController,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
                       labelText: 'Email',
@@ -45,6 +53,7 @@ class _RegPageState extends State<RegPage> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   TextField(
+                    controller: passwordController,
                     style: TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
@@ -65,6 +74,7 @@ class _RegPageState extends State<RegPage> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   TextField(
+                    controller: repeatController,
                     style: TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
@@ -89,7 +99,24 @@ class _RegPageState extends State<RegPage> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(onPressed: (){}, child: Text("Создать аккаунт"),), 
+              child: ElevatedButton(onPressed: () async {
+                if (emailController.text.isEmpty || passwordController.text.isEmpty || repeatController.text.isEmpty) {
+                  print("Поля пусты.");
+                }
+                else {
+                  if (passwordController.text == repeatController.text) {
+                    var user = await authService.signUp(emailController.text, passwordController.text);
+
+                    if (user != null) {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool("isLoggedIn", true);
+                      Navigator.popAndPushNamed(context, '/'); 
+                    }
+                  }
+                  else { print("Пароли не совпадают."); }
+                }
+              }, 
+              child: Text("Создать аккаунт"),), 
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,

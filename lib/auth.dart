@@ -1,4 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter_player/database/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget 
 {
@@ -9,6 +13,10 @@ class AuthPage extends StatefulWidget
 }
 
 class _AuthPageState extends State<AuthPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +35,7 @@ class _AuthPageState extends State<AuthPage> {
               child: Column( 
                 children: [
                   TextField(
+                    controller: emailController,
                     style: TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
@@ -47,6 +56,7 @@ class _AuthPageState extends State<AuthPage> {
                     height: MediaQuery.of(context).size.height * 0.02,
                   ),
                   TextField(
+                    controller: passwordController,
                     style: TextStyle(color: Colors.white),
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
@@ -82,7 +92,21 @@ class _AuthPageState extends State<AuthPage> {
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
-              child: ElevatedButton(onPressed: (){ Navigator.popAndPushNamed(context, '/main'); }, child: Text("Войти"),), 
+              child: ElevatedButton(onPressed: () async { 
+                if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                  print("Поля пустые.");
+                } else {
+                  var user = await authService.signIn(emailController.text, passwordController.text);
+
+                  if (user != null) {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool("isLoggedIn", true);
+                    Navigator.popAndPushNamed(context, '/'); 
+                  } else {
+                    print("Пользователь не найден.");
+                  } 
+                }
+                }, child: Text("Войти"),), 
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
