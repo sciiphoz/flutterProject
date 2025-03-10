@@ -94,16 +94,22 @@ class _AuthPageState extends State<AuthPage> {
               width: MediaQuery.of(context).size.width * 0.5,
               child: ElevatedButton(onPressed: () async { 
                 if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-                  print("Поля пустые.");
+                  ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('All field must be filled.', style: TextStyle(color: Colors.white),), 
+                  backgroundColor: Colors.blueGrey[700],));
                 } else {
                   var user = await authService.signIn(emailController.text, passwordController.text);
 
                   if (user != null) {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setBool("isLoggedIn", true);
+
+                    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Authentification success.', style: TextStyle(color: Colors.white),), 
+                    backgroundColor: Colors.blueGrey[700],));
+
                     Navigator.popAndPushNamed(context, '/'); 
                   } else {
-                    print("Пользователь не найден.");
+                    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Authentification failed.', style: TextStyle(color: Colors.white),), 
+                    backgroundColor: Colors.blueGrey[700],));
                   } 
                 }
                 }, child: Text("Войти"),), 

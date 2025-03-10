@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_player/database/auth.dart';
+import 'package:flutter_player/database/users_table.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegPage extends StatefulWidget 
@@ -11,9 +12,12 @@ class RegPage extends StatefulWidget
 }
 
 class _RegPageState extends State<RegPage> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController repeatController = TextEditingController();
+  
+  UsersTable usersTable = UsersTable();
   AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,26 @@ class _RegPageState extends State<RegPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
+                  TextField(
+                    style: TextStyle(color: Colors.white),
+                    controller: nameController,
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                      labelText: 'Login',
+                      labelStyle: TextStyle(color: Colors.white),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: BorderSide(color: Colors.white)
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: BorderSide(color: Colors.white)
+                      )
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.02,
+                  ),
                   TextField(
                     style: TextStyle(color: Colors.white),
                     controller: emailController,
@@ -100,20 +124,30 @@ class _RegPageState extends State<RegPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,
               child: ElevatedButton(onPressed: () async {
-                if (emailController.text.isEmpty || passwordController.text.isEmpty || repeatController.text.isEmpty) {
+                if (emailController.text.isEmpty || passwordController.text.isEmpty || repeatController.text.isEmpty || nameController.text.isEmpty) {
                   print("Поля пусты.");
+                  ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('All field must be filled.', style: TextStyle(color: Colors.white),), 
+                  backgroundColor: Colors.blueGrey[700],));
                 }
                 else {
                   if (passwordController.text == repeatController.text) {
                     var user = await authService.signUp(emailController.text, passwordController.text);
 
                     if (user != null) {
+                      await usersTable.addUser(nameController.text, emailController.text, passwordController.text);
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool("isLoggedIn", true);
+
+                      ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Registration success.', style: TextStyle(color: Colors.white),), 
+                      backgroundColor: Colors.blueGrey[700],));
+
                       Navigator.popAndPushNamed(context, '/'); 
                     }
                   }
-                  else { print("Пароли не совпадают."); }
+                  else { 
+                    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Passwords do not match.', style: TextStyle(color: Colors.white),), 
+                    backgroundColor: Colors.blueGrey[700],)); 
+                  }
                 }
               }, 
               child: Text("Создать аккаунт"),), 

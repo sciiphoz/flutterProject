@@ -27,6 +27,11 @@ class AppTheme extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       theme: ThemeData(
+        listTileTheme: ListTileThemeData(
+          textColor: Colors.white,
+          iconColor: Colors.white,
+          
+        ),
         scaffoldBackgroundColor: Colors.blueGrey,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(

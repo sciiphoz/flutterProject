@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           }, icon: Icon(Icons.logout, color: Colors.white,))
         ],
       ),
-      bottomNavigationBar: const Footer(), 
+      bottomNavigationBar: Footer(), 
     );
   }
 }

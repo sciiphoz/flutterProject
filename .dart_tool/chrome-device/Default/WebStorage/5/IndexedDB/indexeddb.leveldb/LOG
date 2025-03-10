@@ -1,19 +1,4 @@
-2025/02/26-12:07:56.544 1fe8 Reusing MANIFEST C:\Users\212202\AppData\Local\Temp\flutter_tools.44f6d186\flutter_tools_chrome_device.2550e6ac\Default\WebStorage\5\IndexedDB\indexeddb.leveldb/MANIFEST-000001
-2025/02/26-12:07:56.544 1fe8 Recovering log #3
-2025/02/26-12:07:56.545 1fe8 Reusing old log C:\Users\212202\AppData\Local\Temp\flutter_tools.44f6d186\flutter_tools_chrome_device.2550e6ac\Default\WebStorage\5\IndexedDB\indexeddb.leveldb/000003.log 
-2025/02/26-12:07:56.556 9d8 Level-0 table #5: started
-2025/02/26-12:07:56.559 9d8 Level-0 table #5: 22707 bytes OK
-2025/02/26-12:07:56.562 9d8 Delete type=0 #3
-2025/02/26-12:07:56.562 1fe8 Manual compaction at level-0 from '\x00\x02\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x03\x00\x00\x00' @ 0 : 0; will stop at (end)
-2025/02/26-12:21:09.465 4270 Level-0 table #7: started
-2025/02/26-12:21:09.468 4270 Level-0 table #7: 33512 bytes OK
-2025/02/26-12:21:09.470 4270 Delete type=0 #4
-2025/02/26-12:21:09.470 4270 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
-2025/02/26-12:21:09.471 4270 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x04\x00\x00\xc8\x0b\x00S\x00W\x00H\x00e\x00a\x00l\x00t\x00h\x00L\x00o\x00g' @ 592 : 1
-2025/02/26-12:21:09.471 4270 Compacting 1@1 + 1@2 files
-2025/02/26-12:21:09.473 4270 Generated table #8@1: 58 keys, 1354 bytes
-2025/02/26-12:21:09.473 4270 Compacted 1@1 + 1@2 files => 1354 bytes
-2025/02/26-12:21:09.474 4270 compacted to: files[ 0 0 1 0 0 0 0 ]
-2025/02/26-12:21:09.475 4270 Delete type=2 #5
-2025/02/26-12:21:09.475 4270 Delete type=2 #7
-2025/02/26-12:21:09.475 4270 Manual compaction at level-1 from '\x00\x04\x00\x00\xc8\x0b\x00S\x00W\x00H\x00e\x00a\x00l\x00t\x00h\x00L\x00o\x00g' @ 592 : 1 .. (end); will stop at (end)
+2025/03/10-12:24:24.221 278c Reusing MANIFEST C:\Users\212202\AppData\Local\Temp\flutter_tools.c56947a3\flutter_tools_chrome_device.2d6ceb2\Default\WebStorage\5\IndexedDB\indexeddb.leveldb/MANIFEST-000001
+2025/03/10-12:24:24.222 278c Recovering log #10
+2025/03/10-12:24:24.222 278c Reusing old log C:\Users\212202\AppData\Local\Temp\flutter_tools.c56947a3\flutter_tools_chrome_device.2d6ceb2\Default\WebStorage\5\IndexedDB\indexeddb.leveldb/000010.log 
+2025/03/10-12:24:24.222 278c Delete type=2 #8
