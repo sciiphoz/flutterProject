@@ -125,7 +125,6 @@ class _RegPageState extends State<RegPage> {
               width: MediaQuery.of(context).size.width * 0.5,
               child: ElevatedButton(onPressed: () async {
                 if (emailController.text.isEmpty || passwordController.text.isEmpty || repeatController.text.isEmpty || nameController.text.isEmpty) {
-                  print("Поля пусты.");
                   ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('All field must be filled.', style: TextStyle(color: Colors.white),), 
                   backgroundColor: Colors.blueGrey[700],));
                 }
@@ -138,7 +137,7 @@ class _RegPageState extends State<RegPage> {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool("isLoggedIn", true);
 
-                      ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Registration success.', style: TextStyle(color: Colors.white),), 
+                      ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Welcome, ${user.email!}.', style: TextStyle(color: Colors.white),), 
                       backgroundColor: Colors.blueGrey[700],));
 
                       Navigator.popAndPushNamed(context, '/'); 

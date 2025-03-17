@@ -9,8 +9,8 @@ class TrackPage extends StatefulWidget {
 }
 
 class _TrackPageState extends State<TrackPage> {
+  String urll = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
   bool isPlaying = true;
-
 
   final List<Map<String, String>> tracks = [
     {'title': 'Название трека 1', 'author': 'Исполнитель 1'},
@@ -98,11 +98,16 @@ class _TrackPageState extends State<TrackPage> {
                 SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                 IconButton(
                   icon: Icon(
-                    isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
+                    isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
                     color: Colors.white,
                     size: 40,
                   ),
-                  onPressed: () => setState(() => isPlaying = !isPlaying),
+                  onPressed: () => 
+                  { 
+                    setState(
+                      () => isPlaying = !isPlaying,
+                    ),
+                  }
                 ),
                 SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                 IconButton(

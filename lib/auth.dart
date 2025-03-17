@@ -103,7 +103,7 @@ class _AuthPageState extends State<AuthPage> {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setBool("isLoggedIn", true);
 
-                    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Authentification success.', style: TextStyle(color: Colors.white),), 
+                    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Welcome, ${user.email!}.', style: TextStyle(color: Colors.white),), 
                     backgroundColor: Colors.blueGrey[700],));
 
                     Navigator.popAndPushNamed(context, '/'); 

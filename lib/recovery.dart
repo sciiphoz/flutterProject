@@ -35,10 +35,14 @@ class RecoveryPage extends StatelessWidget {
                   suffixIcon: IconButton(
                     onPressed: () async {
                       if (emailController.text.isEmpty) {
-                        print("Поле пустое.");
+                        ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Email field is empty.', style: TextStyle(color: Colors.white),), 
+                        backgroundColor: Colors.blueGrey[700],));
                       } else {
                         await authService.recoveryPassword(emailController.text);
                         emailController.clear();
+
+                        ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Message sent to $emailController.', style: TextStyle(color: Colors.white),), 
+                        backgroundColor: Colors.blueGrey[700],));
                       }
                     },
                     icon: Icon(
