@@ -45,81 +45,93 @@ class _TrackPageState extends State<TrackPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Название плейлиста', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blueGrey,
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.blueGrey]
+        )
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                Icons.music_note,
-                size: 100,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 20),
-           
-            Text(
-              tracks[currentTrackIndex]['title']!,
-              style: TextStyle(fontSize: 24, color: Colors.white),
-            ),
-            Text(
-              tracks[currentTrackIndex]['author']!,
-              style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.5),),
-            ),
-            SizedBox(height: 20),
-        
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: LinearProgressIndicator(
-                value: 0.5, 
-                backgroundColor: Colors.white.withValues(alpha: .3),
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: previousTrack,
-                  icon: Icon(Icons.skip_previous, color: Colors.white, size: 40),
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                IconButton(
-                  icon: Icon(
-                    isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                  onPressed: () => 
-                  { 
-                    setState(
-                      () => isPlaying = !isPlaying,
-                    ),
-                  }
-                ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                IconButton(
-                  onPressed: nextTrack,
-                  icon: Icon(Icons.skip_next, color: Colors.white, size: 40),
-                ),
-              ],
-            ),
-          ],
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Название плейлиста', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.blueGrey,
         ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.music_note,
+                  size: 100,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20),
+             
+              Text(
+                tracks[currentTrackIndex]['title']!,
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              Text(
+                tracks[currentTrackIndex]['author']!,
+                style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.5),),
+              ),
+              SizedBox(height: 20),
+          
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: LinearProgressIndicator(
+                  value: 0.5, 
+                  backgroundColor: Colors.white.withValues(alpha: .3),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: previousTrack,
+                    icon: Icon(Icons.skip_previous, color: Colors.white, size: 40),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                  IconButton(
+                    icon: Icon(
+                      isPlaying ? Icons.play_circle_fill : Icons.pause_circle_filled,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                    onPressed: () => 
+                    { 
+                      setState(
+                        () => isPlaying = !isPlaying,
+                      ),
+                    }
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                  IconButton(
+                    onPressed: nextTrack,
+                    icon: Icon(Icons.skip_next, color: Colors.white, size: 40),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: const Footer(),
       ),
-      bottomNavigationBar: const Footer(),
     );
   }
 }

@@ -46,118 +46,129 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Ваши плейлисты', style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.blueGrey,
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.blueGrey]
+        )
       ),
-      body: Column(
-        children: [
-          // Основной контент
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 80), 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        spacing: 15,
-                        runSpacing: 15,
-                        children: playlists.map((playlist) {
-                          return SizedBox(
-                            width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: .3),
-                                    borderRadius: BorderRadius.circular(10),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text('Ваши плейлисты', style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Column(
+          children: [
+            // Основной контент
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 80), 
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Wrap(
+                          spacing: 15,
+                          runSpacing: 15,
+                          children: playlists.map((playlist) {
+                            return SizedBox(
+                              width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: .3),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Icon(Icons.image, color: Colors.white, size: 40),
                                   ),
-                                  child: Icon(Icons.image, color: Colors.white, size: 40),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  playlist['title']!,
-                                  style: TextStyle(color: Colors.white),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    playlist['title']!,
+                                    style: TextStyle(color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-       
-          Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey[600],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: .3),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(Icons.music_note, color: Colors.white),
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          tracks[currentTrackIndex]['title']!,
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+         
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[600],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: .3),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        Text(
-                          tracks[currentTrackIndex]['author']!,
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(
-                        isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
-                        color: Colors.white,
-                        size: 40,
+                        child: Icon(Icons.music_note, color: Colors.white),
                       ),
-                      onPressed: () => setState(() => isPlaying = !isPlaying),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                LinearProgressIndicator(
-                  value: 0.3,
-                  backgroundColor: Colors.white.withValues(alpha: .3),
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ],
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            tracks[currentTrackIndex]['title']!,
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            tracks[currentTrackIndex]['author']!,
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(
+                          isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        onPressed: () => setState(() => isPlaying = !isPlaying),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  LinearProgressIndicator(
+                    value: 0.3,
+                    backgroundColor: Colors.white.withValues(alpha: .3),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ],
+              ),
             ),
-          ),
-          
-          SizedBox(height: 20), 
-        ],
+            
+            SizedBox(height: 20), 
+          ],
+        ),
+        bottomNavigationBar: Footer(),
       ),
-      bottomNavigationBar: Footer(), 
-      backgroundColor: Colors.blueGrey, 
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_player/landing.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:flutter_player/playlistpage.dart';
+import 'package:flutter_player/profile.dart';
 import 'package:flutter_player/recovery.dart';
 import 'package:flutter_player/auth.dart';
 import 'package:flutter_player/reg.dart';
@@ -31,9 +32,8 @@ class AppTheme extends StatelessWidget {
         listTileTheme: ListTileThemeData(
           textColor: Colors.white,
           iconColor: Colors.white,
-          
         ),
-        scaffoldBackgroundColor: Colors.blueGrey,
+        scaffoldBackgroundColor: Colors.transparent,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -60,6 +60,7 @@ class AppTheme extends StatelessWidget {
         '/track': (context) => TrackPage(),
         '/playlists': (context) => PlaylistPage(),
         '/player': (context) => PlayerPage(),
+        '/profile': (context) => ProfilePage(),
       }
     );
   }

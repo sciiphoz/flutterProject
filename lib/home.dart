@@ -36,7 +36,15 @@ class _HomePageState extends State<HomePage> {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue, Colors.blueGrey]
+        )
+      ),
       child: Scaffold(
+        backgroundColor: Colors.transparent,        
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +90,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey[600],
+          backgroundColor: Colors.transparent,
           title: Text("Home", style: TextStyle(color: Colors.white),),
           actions: [
             IconButton(onPressed: () async {
@@ -106,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                   )
                 )
               );
-            }, icon: Icon(Icons.play_arrow))
+            }, icon: Icon(Icons.play_arrow)),
+            IconButton(onPressed: () { Navigator.popAndPushNamed(context, '/profile'); }, icon: Icon(CupertinoIcons.profile_circled))
           ],
         ),
         bottomNavigationBar: Footer(), 
