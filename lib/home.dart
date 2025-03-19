@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_player/database/auth.dart';
+import 'package:flutter_player/drawer.dart';
 import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,6 +120,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         bottomNavigationBar: Footer(), 
+        drawer: DrawerPage(),
       ),
     );
   }
