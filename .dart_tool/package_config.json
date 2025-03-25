@@ -249,9 +249,9 @@
     },
     {
       "name": "image_picker_linux",
-      "rootUri": "file:///C:/Users/sciiphoz/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_linux-0.2.1+1",
+      "rootUri": "file:///C:/Users/sciiphoz/AppData/Local/Pub/Cache/hosted/pub.dev/image_picker_linux-0.2.1+2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.4"
     },
     {
       "name": "image_picker_macos",
@@ -644,7 +644,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-03-17T19:55:30.895542Z",
+  "generated": "2025-03-25T04:08:42.585743Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/src/flutter",
