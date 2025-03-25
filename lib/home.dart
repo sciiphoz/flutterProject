@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.popAndPushNamed(context, '/auth');
             }, icon: Icon(Icons.logout, color: Colors.white,)),
             IconButton(onPressed: (){
-              Navigator.popAndPushNamed(context, '/track');
+              Navigator.popAndPushNamed(context, '/playlists');
             }, icon: Icon(Icons.track_changes, color: Colors.white,)),
             IconButton(onPressed: () {
               Navigator.push(
