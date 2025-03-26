@@ -119,7 +119,12 @@ class _HomePageState extends State<HomePage> {
             IconButton(onPressed: () { Navigator.popAndPushNamed(context, '/profile'); }, icon: Icon(CupertinoIcons.profile_circled))
           ],
         ),
-        bottomNavigationBar: Footer(), 
+        bottomNavigationBar: Footer(
+          nameSound: 'Четыре сезона: Лето',
+          author: 'Антонио Вивальди',
+          urlMusic: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music/Yolanda_Kondonassis_Rudolf_Werthen_I_Fiamminghi_The_Orchestra_of_Flanders_Antonio_Vivaldi_-_Vivaldi_The_Four_Seasons_Violin_Concerto_in_G_Minor_Op_8_No_2_RV_315_Summer_-_I_Allegro_non_molto_Arr_Y_Kondonassis_R_Wer.mp3',
+          urlPhoto: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music_photos/summer.png',
+        ), 
         drawer: DrawerPage(),
       ),
     );

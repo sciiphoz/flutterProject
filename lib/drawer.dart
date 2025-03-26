@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_player/database/auth.dart';
+import 'package:flutter_player/music/player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -61,18 +63,30 @@ class _DrawerPageState extends State<DrawerPage> {
                   ),
                 ),
                 otherAccountsPictures: [
-                  IconButton(onPressed: (){}, icon: Icon(Icons.logout))
+                  IconButton(onPressed: () async {
+                    await authService.logOut();
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('isLoggedIn', false);
+                    Navigator.popAndPushNamed(context, '/auth');
+                  }, icon: Icon(Icons.logout, color: Colors.white,))
                 ],
               )
             ),
             ListTile(
               iconColor: Colors.white,
               textColor: Colors.white,
-              onTap: () async {
-                await authService.logOut();
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('isLoggedIn', false);
-                Navigator.popAndPushNamed(context, '/auth');
+              onTap: () {
+                Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => PlayerPage(
+                    nameSound: 'Четыре сезона: Лето',
+                    author: 'Антонио Вивальди',
+                    urlMusic: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music/Yolanda_Kondonassis_Rudolf_Werthen_I_Fiamminghi_The_Orchestra_of_Flanders_Antonio_Vivaldi_-_Vivaldi_The_Four_Seasons_Violin_Concerto_in_G_Minor_Op_8_No_2_RV_315_Summer_-_I_Allegro_non_molto_Arr_Y_Kondonassis_R_Wer.mp3',
+                    urlPhoto: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music_photos/summer.png',
+                  )
+                )
+              );
               },
               title: Text("Моя музыка"),
               leading: Icon(Icons.music_note),
@@ -80,7 +94,9 @@ class _DrawerPageState extends State<DrawerPage> {
             ListTile(
               iconColor: Colors.white,
               textColor: Colors.white,
-              onTap: (){},
+              onTap: (){
+                Navigator.popAndPushNamed(context, '/playlists');
+              },
               title: Text("Мои плейлисты"),
               leading: Icon(Icons.featured_play_list),
             ),

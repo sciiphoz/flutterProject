@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_player/footer.dart';
+import 'package:flutter_player/music/player.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PlaylistPage extends StatefulWidget {
   const PlaylistPage({super.key});
@@ -9,39 +12,40 @@ class PlaylistPage extends StatefulWidget {
 }
 
 class _PlaylistPageState extends State<PlaylistPage> {
-  final List<Map<String, String>> tracks = [
-    {'title': 'Трек 1', 'author': 'Автор 1'},
-    {'title': 'Трек 2', 'author': 'Автор 2'},
-    {'title': 'Трек 3', 'author': 'Автор 3'},
-    {'title': 'Трек 4', 'author': 'Автор 4'},
-    {'title': 'Трек 5', 'author': 'Автор 5'},
-  ];
-
-  final List<Map<String, String>> playlists = [
-    {'title': 'Плейлист 1'},
-    {'title': 'Плейлист 2'},
-    {'title': 'Плейлист 3'},
-    {'title': 'Плейлист 4'},
-    {'title': 'Плейлист 5'},
-    {'title': 'Плейлист 6'},
-  ];
-
-  final List<Map<String, String>> artists = [
-    {'name': 'Исполнитель 1'},
-    {'name': 'Исполнитель 2'},
-    {'name': 'Исполнитель 3'},
-    {'name': 'Исполнитель 4'},
-    {'name': 'Исполнитель 5'},
-  ];
-
-  String searchQuery = '';
+  final _supabase = Supabase.instance.client;
+  List<Map<String, String>> tracks = []; 
   int currentTrackIndex = 0;
   bool isPlaying = true;
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getTracks();
+  }
+
+  Future<void> getTracks() async {
+    try {
+      final response = await _supabase.from('track').select('name, author, image, musicUrl');
+      
+      setState(() {
+        tracks = response.map((item) => {
+          'name': item['name']?.toString() ?? 'Без названия',
+          'author': item['author']?.toString() ?? 'Неизвестный исполнитель',
+          'image': item['image']?.toString() ?? 'Без названия',
+          'musicUrl': item['musicUrl']?.toString() ?? 'Неизвестный исполнитель',
+        }).toList();
+      });
+      
+      print('Загружено ${tracks.length} треков');
+    } catch (e) {
+      print('Ошибка загрузки треков: $e');
+    }
+  }
 
   List<Map<String, String>> get filteredTracks => tracks
       .where((track) =>
-          track['title']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
-          track['author']!.toLowerCase().contains(searchQuery.toLowerCase()))
+          track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()))
       .toList();
 
   @override
@@ -64,6 +68,29 @@ class _PlaylistPageState extends State<PlaylistPage> {
         ),
         body: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.all(12.0),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.2),
+                  hintText: 'Поиск по названию или исполнителю',
+                  hintStyle: TextStyle(color: Colors.white70),
+                  prefixIcon: Icon(Icons.search, color: Colors.white),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                ),
+                style: TextStyle(color: Colors.white),
+                onChanged: (value) {
+                  setState(() {
+                  });
+                },
+              ),
+            ),
             // Основной контент
             Expanded(
               child: SingleChildScrollView(
@@ -78,26 +105,42 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         child: Wrap(
                           spacing: 15,
                           runSpacing: 15,
-                          children: playlists.map((playlist) {
+                          children: filteredTracks.map((track) {
                             return SizedBox(
                               width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
                               child: Column(
                                 children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: .3),
-                                      borderRadius: BorderRadius.circular(10),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.network(
+                                      track['image']!,
+                                      height: MediaQuery.of(context).size.height * 0.3,
+                                      width: MediaQuery.of(context).size.width * 0.6,
                                     ),
-                                    child: Icon(Icons.image, color: Colors.white, size: 40),
                                   ),
-                                  SizedBox(height: 5),
                                   Text(
-                                    playlist['title']!,
+                                    track['name']!,
                                     style: TextStyle(color: Colors.white),
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                  Text(
+                                    track['author']!,
+                                    style: TextStyle(color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  FilledButton(onPressed: () {
+                                      Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) => PlayerPage(
+                                          nameSound: track['name']!,
+                                          author: track['author']!,
+                                          urlMusic: track['musicUrl']!,
+                                          urlPhoto: track['image']!,
+                                        )
+                                      )
+                                    );
+                                  }, child: Text("Прослушать"))
                                 ],
                               ),
                             );
@@ -108,66 +151,16 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   ),
                 ),
               ),
-            ),
-         
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[600],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: .3),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(Icons.music_note, color: Colors.white),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            tracks[currentTrackIndex]['title']!,
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            tracks[currentTrackIndex]['author']!,
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      IconButton(
-                        icon: Icon(
-                          isPlaying ? Icons.pause_circle_filled : Icons.play_circle_filled,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                        onPressed: () => setState(() => isPlaying = !isPlaying),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  LinearProgressIndicator(
-                    value: 0.3,
-                    backgroundColor: Colors.white.withValues(alpha: .3),
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            
+            ),    
             SizedBox(height: 20), 
           ],
         ),
-        bottomNavigationBar: Footer(),
+        bottomNavigationBar: Footer(
+          nameSound: 'Четыре сезона: Лето',
+          author: 'Антонио Вивальди',
+          urlMusic: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music/Yolanda_Kondonassis_Rudolf_Werthen_I_Fiamminghi_The_Orchestra_of_Flanders_Antonio_Vivaldi_-_Vivaldi_The_Four_Seasons_Violin_Concerto_in_G_Minor_Op_8_No_2_RV_315_Summer_-_I_Allegro_non_molto_Arr_Y_Kondonassis_R_Wer.mp3',
+          urlPhoto: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music_photos/summer.png',
+        ),
       ),
     );
   }

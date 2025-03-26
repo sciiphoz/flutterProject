@@ -1,9 +1,20 @@
-2025/03/19-12:00:01.923 21ac Log #3: 44 ops saved to Table #7 OK
-2025/03/19-12:00:01.926 21ac Archiving C:\Users\212202\AppData\Local\Temp\flutter_tools.11a21371\flutter_tools_chrome_device.65da2760\Default\Site Characteristics Database/000003.log: OK
-2025/03/19-12:00:01.928 21ac Log #6: 1 ops saved to Table #8 OK
-2025/03/19-12:00:01.929 21ac Archiving C:\Users\212202\AppData\Local\Temp\flutter_tools.11a21371\flutter_tools_chrome_device.65da2760\Default\Site Characteristics Database/000006.log: OK
-2025/03/19-12:00:01.929 21ac Table #4: 44 entries OK
-2025/03/19-12:00:01.929 21ac Table #7: 44 entries OK
-2025/03/19-12:00:01.929 21ac Table #8: 1 entries OK
-2025/03/19-12:00:01.930 21ac Archiving C:\Users\212202\AppData\Local\Temp\flutter_tools.11a21371\flutter_tools_chrome_device.65da2760\Default\Site Characteristics Database/MANIFEST-000001: OK
-2025/03/19-12:00:01.934 21ac **** Repaired leveldb C:\Users\212202\AppData\Local\Temp\flutter_tools.11a21371\flutter_tools_chrome_device.65da2760\Default\Site Characteristics Database; recovered 3 files; 2679 bytes. Some data may have been lost. ****
+2025/03/20-08:02:05.144 4340 Reusing MANIFEST C:\Users\212202\AppData\Local\Temp\flutter_tools.1ff97570\flutter_tools_chrome_device.4327c0de\Default\Site Characteristics Database/MANIFEST-000001
+2025/03/20-08:02:05.146 4340 Recovering log #3
+2025/03/20-08:02:05.147 4340 Level-0 table #10: started
+2025/03/20-08:02:05.148 4340 Level-0 table #10: 1257 bytes OK
+2025/03/20-08:02:05.148 4340 Recovering log #6
+2025/03/20-08:02:05.148 4340 Level-0 table #11: started
+2025/03/20-08:02:05.151 4340 Level-0 table #11: 165 bytes OK
+2025/03/20-08:02:05.151 4340 Recovering log #10
+2025/03/20-08:02:05.152 4340 Reusing old log C:\Users\212202\AppData\Local\Temp\flutter_tools.1ff97570\flutter_tools_chrome_device.4327c0de\Default\Site Characteristics Database/000010.log 
+2025/03/20-08:02:05.155 4340 Delete type=0 #3
+2025/03/20-08:02:05.155 4340 Delete type=0 #6
+2025/03/20-08:02:05.155 41ac Compacting 5@0 + 0@1 files
+2025/03/20-08:02:05.157 41ac Generated table #12@0: 12 keys, 802 bytes
+2025/03/20-08:02:05.157 41ac Compacted 5@0 + 0@1 files => 802 bytes
+2025/03/20-08:02:05.158 41ac compacted to: files[ 0 1 0 0 0 0 0 ]
+2025/03/20-08:02:05.159 41ac Delete type=2 #4
+2025/03/20-08:02:05.159 41ac Delete type=2 #7
+2025/03/20-08:02:05.159 41ac Delete type=2 #8
+2025/03/20-08:02:05.159 41ac Delete type=2 #10
+2025/03/20-08:02:05.159 41ac Delete type=2 #11

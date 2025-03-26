@@ -1,9 +1,31 @@
-2025/03/13-08:23:33.769 1578 Reusing MANIFEST C:\Users\212202\AppData\Local\Temp\flutter_tools.a9e99cb6\flutter_tools_chrome_device.f504b841\Default\Local Storage\leveldb/MANIFEST-000001
-2025/03/13-08:23:33.772 1578 Recovering log #19
-2025/03/13-08:23:33.773 1578 Reusing old log C:\Users\212202\AppData\Local\Temp\flutter_tools.a9e99cb6\flutter_tools_chrome_device.f504b841\Default\Local Storage\leveldb/000019.log 
-2025/03/13-08:23:33.773 1578 Delete type=0 #3
-2025/03/13-08:23:33.774 1578 Delete type=0 #4
-2025/03/13-08:23:33.774 1578 Delete type=0 #13
-2025/03/13-08:24:51.729 2d54 Level-0 table #23: started
-2025/03/13-08:24:51.732 2d54 Level-0 table #23: 71380 bytes OK
-2025/03/13-08:24:51.733 2d54 Delete type=0 #19
+2025/03/20-08:02:05.164 1538 Reusing MANIFEST C:\Users\212202\AppData\Local\Temp\flutter_tools.1ff97570\flutter_tools_chrome_device.4327c0de\Default\Local Storage\leveldb/MANIFEST-000001
+2025/03/20-08:02:05.168 1538 Recovering log #3
+2025/03/20-08:02:05.168 1538 Level-0 table #3: started
+2025/03/20-08:02:05.170 1538 Level-0 table #3: 2188 bytes OK
+2025/03/20-08:02:05.170 1538 Recovering log #4
+2025/03/20-08:02:05.170 1538 Level-0 table #4: started
+2025/03/20-08:02:05.173 1538 Level-0 table #4: 78901 bytes OK
+2025/03/20-08:02:05.173 1538 Recovering log #13
+2025/03/20-08:02:05.173 1538 Level-0 table #5: started
+2025/03/20-08:02:05.175 1538 Level-0 table #5: 25307 bytes OK
+2025/03/20-08:02:05.175 1538 Recovering log #19
+2025/03/20-08:02:05.175 1538 Level-0 table #14: started
+2025/03/20-08:02:05.178 1538 Level-0 table #14: 13076 bytes OK
+2025/03/20-08:02:05.178 1538 Recovering log #22
+2025/03/20-08:02:05.179 1538 Reusing old log C:\Users\212202\AppData\Local\Temp\flutter_tools.1ff97570\flutter_tools_chrome_device.4327c0de\Default\Local Storage\leveldb/000022.log 
+2025/03/20-08:02:05.181 1538 Delete type=0 #3
+2025/03/20-08:02:05.181 1538 Delete type=0 #4
+2025/03/20-08:02:05.181 1538 Delete type=0 #13
+2025/03/20-08:02:05.181 1538 Delete type=2 #15
+2025/03/20-08:02:05.181 1538 Delete type=2 #18
+2025/03/20-08:02:05.181 1538 Delete type=0 #19
+2025/03/20-08:02:05.181 1538 Delete type=2 #20
+2025/03/20-08:02:05.181 1538 Delete type=2 #23
+2025/03/20-08:02:05.183 2ea4 Compacting 4@0 + 0@1 files
+2025/03/20-08:02:05.187 2ea4 Generated table #23@0: 75 keys, 14048 bytes
+2025/03/20-08:02:05.187 2ea4 Compacted 4@0 + 0@1 files => 14048 bytes
+2025/03/20-08:02:05.188 2ea4 compacted to: files[ 0 1 0 0 0 0 0 ]
+2025/03/20-08:02:05.189 2ea4 Delete type=2 #3
+2025/03/20-08:02:05.189 2ea4 Delete type=2 #4
+2025/03/20-08:02:05.189 2ea4 Delete type=2 #5
+2025/03/20-08:02:05.189 2ea4 Delete type=2 #14
