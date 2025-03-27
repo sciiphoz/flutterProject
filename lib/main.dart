@@ -62,7 +62,7 @@ class AppTheme extends StatelessWidget {
         '/reg': (context) => RegPage(),
         '/recovery': (context) => RecoveryPage(),
         '/main': (context) => HomePage(),
-        '/track': (context) => TrackPage(),
+        '/tracks': (context) => TrackPage(),
         '/playlists': (context) => PlaylistPage(),
         '/player': (context) => PlayerPage(),
         '/profile': (context) => ProfilePage(),

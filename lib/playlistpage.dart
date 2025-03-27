@@ -13,39 +13,37 @@ class PlaylistPage extends StatefulWidget {
 
 class _PlaylistPageState extends State<PlaylistPage> {
   final _supabase = Supabase.instance.client;
-  List<Map<String, String>> tracks = []; 
+  List<Map<String, String>> lists = []; 
   int currentTrackIndex = 0;
   bool isPlaying = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    getTracks();
+    getLists();
   }
 
-  Future<void> getTracks() async {
+  Future<void> getLists() async {
     try {
-      final response = await _supabase.from('track').select('name, author, image, musicUrl');
+      final response = await _supabase.from('list').select('list_name, user_id');
       
       setState(() {
-        tracks = response.map((item) => {
-          'name': item['name']?.toString() ?? 'Без названия',
-          'author': item['author']?.toString() ?? 'Неизвестный исполнитель',
-          'image': item['image']?.toString() ?? 'Без названия',
-          'musicUrl': item['musicUrl']?.toString() ?? 'Неизвестный исполнитель',
+        lists = response.map((item) => {
+          'list_name': item['list_name']?.toString() ?? 'Без названия',
+          'user_id': item['user_id']?.toString() ?? 'Неизвестный исполнитель',
         }).toList();
       });
       
-      print('Загружено ${tracks.length} треков');
+      print('Загружено ${lists.length} треков');
     } catch (e) {
       print('Ошибка загрузки треков: $e');
     }
   }
 
-  List<Map<String, String>> get filteredTracks => tracks
-      .where((track) =>
-          track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()))
+  List<Map<String, String>> get filteredLists => lists
+      .where((list) =>
+          list['list_name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
       .toList();
 
   @override
@@ -105,41 +103,28 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         child: Wrap(
                           spacing: 15,
                           runSpacing: 15,
-                          children: filteredTracks.map((track) {
+                          children: filteredLists.map((list) {
                             return SizedBox(
                               width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
-                              child: Column(
+                              child: Row(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.network(
-                                      track['image']!,
-                                      height: MediaQuery.of(context).size.height * 0.3,
-                                      width: MediaQuery.of(context).size.width * 0.6,
-                                    ),
-                                  ),
                                   Text(
-                                    track['name']!,
-                                    style: TextStyle(color: Colors.white),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    track['author']!,
+                                    list['list_name']!,
                                     style: TextStyle(color: Colors.white),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   FilledButton(onPressed: () {
-                                      Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                        builder: (context) => PlayerPage(
-                                          nameSound: track['name']!,
-                                          author: track['author']!,
-                                          urlMusic: track['musicUrl']!,
-                                          urlPhoto: track['image']!,
-                                        )
-                                      )
-                                    );
+                                    //   Navigator.push(
+                                    //   context,
+                                    //   CupertinoPageRoute(
+                                    //     builder: (context) => PlayerPage(
+                                    //       nameSound: track['name']!,
+                                    //       author: track['author']!,
+                                    //       urlMusic: track['musicUrl']!,
+                                    //       urlPhoto: track['image']!,
+                                    //     )
+                                    //   )
+                                    // );
                                   }, child: Text("Прослушать"))
                                 ],
                               ),

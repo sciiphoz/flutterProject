@@ -118,8 +118,10 @@ class _AuthPageState extends State<AuthPage> {
                       backgroundColor: Colors.blueGrey[700],));
       
                       Navigator.popAndPushNamed(context, '/'); 
+                      print('asd');
                     } else {
                       ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text('Authentification failed.', style: TextStyle(color: Colors.white),), 
+
                       backgroundColor: Colors.blueGrey[700],));
                     } 
                   }

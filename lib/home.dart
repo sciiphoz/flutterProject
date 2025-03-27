@@ -13,23 +13,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-  final List<Map<String, String>> playlists = [
-    {'title': 'Плейлист 1'},
-    {'title': 'Плейлист 2'},
-    {'title': 'Плейлист 3'},
-    {'title': 'Плейлист 4'},
-    {'title': 'Плейлист 5'},
-    {'title': 'Плейлист 6'},
-  ];
-
-  final List<Map<String, String>> artists = [
-    {'name': 'Исполнитель 1'},
-    {'name': 'Исполнитель 2'},
-    {'name': 'Исполнитель 3'},
-    {'name': 'Исполнитель 4'},
-    {'name': 'Исполнитель 5'},
-  ];
-
 class _HomePageState extends State<HomePage> {
   AuthService authService = AuthService();
   @override
@@ -92,7 +75,7 @@ class _HomePageState extends State<HomePage> {
         ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text("Home", style: TextStyle(color: Colors.white),),
+          title: Text("Главная", style: TextStyle(color: Colors.white),),
           actions: [
             IconButton(onPressed: () async {
               await authService.logOut();
@@ -101,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.popAndPushNamed(context, '/auth');
             }, icon: Icon(Icons.logout, color: Colors.white,)),
             IconButton(onPressed: (){
-              Navigator.popAndPushNamed(context, '/track');
+              Navigator.popAndPushNamed(context, '/playlists');
             }, icon: Icon(Icons.track_changes, color: Colors.white,)),
             IconButton(onPressed: () {
               Navigator.push(
