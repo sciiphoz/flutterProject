@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+
 class TrackPage extends StatefulWidget {
   const TrackPage({super.key});
 
@@ -16,6 +18,7 @@ class _TrackPageState extends State<TrackPage> {
   int currentTrackIndex = 0;
   bool isPlaying = true;
   final TextEditingController _searchController = TextEditingController();
+  final String currentUser = Supabase.instance.client.auth.currentUser!.id.toString();
 
   @override
   void initState() {
@@ -25,7 +28,9 @@ class _TrackPageState extends State<TrackPage> {
 
   Future<void> getTracks() async {
     try {
-      final response = await _supabase.from('track').select('name, author, image, musicUrl');
+      final response = await _supabase.from('usertrack')
+      .select('id, track(name, author, image, musicUrl), user_id')
+      .eq('user_id', currentUser);
       
       setState(() {
         tracks = response.map((item) => {
