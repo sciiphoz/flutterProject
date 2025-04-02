@@ -31,11 +31,13 @@ class UsersTable {
     }
   }
   
-  Future<void> addUserTrack(String user_id, int track_id) async {
+  Future<void> addUserTrack(String userId, int trackId) async {
     try {
+      print(userId);
+      print(trackId);
       await _supabase.client.from('usertrack').insert({
-        'user_id':user_id,
-        'track_id':track_id
+        'user_id':userId,
+        'track_id':trackId
       });
     } catch (e) {
       print(e);
@@ -43,11 +45,20 @@ class UsersTable {
     }
   }
 
-    Future<void> addUserList(String list_name, String user_id) async {
+  Future<void> deleteUserTrack(int id) async {
+    try {
+      await _supabase.client.from('usertrack').delete().eq('id', id);
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future<void> addUserList(String listName, String userId) async {
     try {
       await _supabase.client.from('list').insert({
-        'list_name':list_name,
-        'user_id':user_id,
+        'list_name':listName,
+        'user_id':userId,
       });
     } catch (e) {
       print(e);
@@ -55,12 +66,21 @@ class UsersTable {
     }
   }
 
-    Future<void> addTrackToPlaylist(int list_id, int track_id) async {
+  Future<void> addTrackToPlaylist(int listId, int trackId) async {
     try {
       await _supabase.client.from('playlist').insert({
-        'track_id':track_id,
-        'list_id':list_id
+        'track_id':trackId,
+        'list_id':listId
       });
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+  
+  Future<void> deleteTrackFromPlaylist(int id) async {
+    try {
+      await _supabase.client.from('playlist').delete().eq('id', id);
     } catch (e) {
       print(e);
       return;

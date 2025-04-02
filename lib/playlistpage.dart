@@ -1,5 +1,8 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_player/footer.dart';
+import 'package:flutter_player/list.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PlaylistPage extends StatefulWidget {
@@ -15,6 +18,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
   int currentTrackIndex = 0;
   bool isPlaying = true;
   final TextEditingController _searchController = TextEditingController();
+  final String currentUser = Supabase.instance.client.auth.currentUser!.id.toString();
 
   @override
   void initState() {
@@ -24,10 +28,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
 
   Future<void> getLists() async {
     try {
-      final response = await _supabase.from('list').select('list_name, user_id');
+      final response = await _supabase.from('list').select('id, list_name, user_id')
+      .eq('user_id', currentUser);
       
       setState(() {
         lists = response.map((item) => {
+          'id':item['id']?.toString() ?? "",
           'list_name': item['list_name']?.toString() ?? 'Без названия',
           'user_id': item['user_id']?.toString() ?? 'Неизвестный исполнитель',
         }).toList();
@@ -71,7 +77,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white.withValues(alpha: 0.2),
-                  hintText: 'Поиск по названию или исполнителю',
+                  hintText: 'Поиск по названию',
                   hintStyle: TextStyle(color: Colors.white70),
                   prefixIcon: Icon(Icons.search, color: Colors.white),
                   border: OutlineInputBorder(
@@ -103,28 +109,48 @@ class _PlaylistPageState extends State<PlaylistPage> {
                           runSpacing: 15,
                           children: filteredLists.map((list) {
                             return SizedBox(
-                              width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
-                              child: Row(
-                                children: [
-                                  Text(
-                                    list['list_name']!,
-                                    style: TextStyle(color: Colors.white),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  FilledButton(onPressed: () {
-                                    //   Navigator.push(
-                                    //   context,
-                                    //   CupertinoPageRoute(
-                                    //     builder: (context) => PlayerPage(
-                                    //       nameSound: track['name']!,
-                                    //       author: track['author']!,
-                                    //       urlMusic: track['musicUrl']!,
-                                    //       urlPhoto: track['image']!,
-                                    //     )
-                                    //   )
-                                    // );
-                                  }, child: Text("Прослушать"))
-                                ],
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(200, 0, 200, 0),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: MediaQuery.of(context).size.height * 0.05,
+                                      width: MediaQuery.of(context).size.width * 0.8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.3),
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          list['list_name']!,
+                                          style: TextStyle(color: Colors.white),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        alignment: Alignment.centerRight,
+                                        child: FilledButton(onPressed: () {
+                                            Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) => ListPage(
+                                                id_list: list['id']
+                                              )
+                                            )
+                                          );
+                                        }, child: Text("Прослушать")),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }).toList(),

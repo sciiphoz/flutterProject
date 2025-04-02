@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_player/database/auth.dart';
+import 'package:flutter_player/database/users_table.dart';
 import 'package:flutter_player/drawer.dart';
 import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,10 +17,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _supabase = Supabase.instance.client;
-  List<Map<String, String>> tracks = []; 
+  List<Map<String, dynamic>> tracks = []; 
   bool isPlaying = true;
   final TextEditingController _searchController = TextEditingController();
   AuthService authService = AuthService();
+  final String currentUser = Supabase.instance.client.auth.currentUser!.id.toString();
+  UsersTable usersTable = UsersTable();
 
   @override
   void initState() {
@@ -29,11 +32,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getTracks() async {
     try {
-      final response = await _supabase.from('track').select('name, author, image, musicUrl');
+      final response = await _supabase.from('track').select('id, name, author, image, musicUrl');
       
       
       setState(() {
         tracks = response.map((item) => {
+          'id': item['id'],
           'name': item['name']?.toString() ?? 'Без названия',
           'author': item['author']?.toString() ?? 'Неизвестный исполнитель',
           'image': item['image']?.toString() ?? 'Без названия',
@@ -47,9 +51,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  List<Map<String, String>> get filteredTracks => tracks
+  List<Map<String, dynamic>> get filteredTracks => tracks
     .where((track) =>
-        track['name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
+        track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()))
     .toList();
 
   @override
@@ -89,7 +93,11 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(6),
                       borderSide: BorderSide(color: Colors.white)
                     )
-                  )
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                  });
+                },
                 ),
               ),
               SizedBox(
@@ -123,38 +131,64 @@ class _HomePageState extends State<HomePage> {
                                 width: (MediaQuery.of(context).size.width - 50) / 2, // 2 колонки
                                 child: Column(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                        track['image']!,
-                                        height: MediaQuery.of(context).size.height * 0.3,
-                                        width: MediaQuery.of(context).size.width * 0.6,
-                                      ),
+                                    Column(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(20),
+                                          child: Image.network(
+                                            track['image']!,
+                                            height: MediaQuery.of(context).size.height * 0.3,
+                                            width: MediaQuery.of(context).size.width * 0.6,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.15,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            track['name']!,
+                                            style: TextStyle(fontSize: 24, color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.15,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            track['author']!,
+                                            style: TextStyle(fontSize: 16, color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      track['name']!,
-                                      style: TextStyle(color: Colors.white),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      track['author']!,
-                                      style: TextStyle(color: Colors.white),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    FilledButton(onPressed: () {
-                                        Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => PlayerPage(
-                                            nameSound: track['name']!,
-                                            author: track['author']!,
-                                            urlMusic: track['musicUrl']!,
-                                            urlPhoto: track['image']!,
-                                          )
-                                        )
-                                      );
-                                    }, child: Text("Прослушать"))
-
+                                    Row(
+                                      
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(onPressed: () {
+                                            Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (context) => PlayerPage(
+                                                nameSound: track['name']!,
+                                                author: track['author']!,
+                                                urlMusic: track['musicUrl']!,
+                                                urlPhoto: track['image']!,
+                                              )
+                                            )
+                                          );
+                                        }, child: Text("Прослушать")),
+                                        IconButton(onPressed: () async {
+                                          if (await _supabase.from('usertrack').count().eq('user_id', currentUser).eq('track_id', track['id'] as int) == 1) {
+                                            print('track est');
+                                            return;
+                                          }
+                                          else {
+                                            usersTable.addUserTrack(currentUser, track['id']);
+                                          }
+                                        }, icon: Icon(CupertinoIcons.heart_fill, color: Colors.white,))
+                                      ],
+                                    )
                                   ],
                                 ),
                               );
