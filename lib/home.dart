@@ -5,7 +5,6 @@ import 'package:flutter_player/drawer.dart';
 import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Map<String, String>> lists = []; 
   final _supabase = Supabase.instance.client;
   List<Map<String, dynamic>> tracks = []; 
   bool isPlaying = true;
@@ -27,7 +27,27 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    getLists();
     getTracks();
+  }
+
+  Future<void> getLists() async {
+    try {
+      final response = await _supabase.from('list').select('id, list_name, user_id')
+      .eq('user_id', currentUser);
+      
+      setState(() {
+        lists = response.map((item) => {
+          'id':item['id']?.toString() ?? "",
+          'list_name': item['list_name']?.toString() ?? 'Без названия',
+          'user_id': item['user_id']?.toString() ?? 'Неизвестный исполнитель',
+        }).toList();
+      });
+      
+      print('Загружено ${lists.length} плейлистов');
+    } catch (e) {
+      print('Ошибка загрузки треков: $e');
+    }
   }
 
   Future<void> getTracks() async {
@@ -50,6 +70,42 @@ class _HomePageState extends State<HomePage> {
       print('Ошибка загрузки треков: $e');
     }
   }
+
+  void _showPlaylistDialog(int trackId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Добавить в плейлист'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: lists.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(lists[index]['list_name']!, style: TextStyle(color: Colors.black),),
+                  onTap: () {
+                    usersTable.addTrackToPlaylist(lists[index]['id']!, trackId);
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Отмена', style: TextStyle(color: Colors.black),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   List<Map<String, dynamic>> get filteredTracks => tracks
     .where((track) =>
@@ -165,28 +221,42 @@ class _HomePageState extends State<HomePage> {
                                       
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        ElevatedButton(onPressed: () {
+                                        ElevatedButton(
+                                          onPressed: () {
                                             Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) => PlayerPage(
-                                                nameSound: track['name']!,
-                                                author: track['author']!,
-                                                urlMusic: track['musicUrl']!,
-                                                urlPhoto: track['image']!,
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) => PlayerPage(
+                                                  nameSound: track['name']!,
+                                                  author: track['author']!,
+                                                  urlMusic: track['musicUrl']!,
+                                                  urlPhoto: track['image']!,
+                                                )
                                               )
-                                            )
-                                          );
-                                        }, child: Text("Прослушать")),
-                                        IconButton(onPressed: () async {
-                                          if (await _supabase.from('usertrack').count().eq('user_id', currentUser).eq('track_id', track['id'] as int) == 1) {
-                                            print('track est');
-                                            return;
-                                          }
-                                          else {
-                                            usersTable.addUserTrack(currentUser, track['id']);
-                                          }
-                                        }, icon: Icon(CupertinoIcons.heart_fill, color: Colors.white,))
+                                            );
+                                          }, 
+                                          child: Text("Прослушать")
+                                        ),
+                                        IconButton(
+                                          onPressed: () async {
+                                            if (await _supabase.from('usertrack')
+                                                .count()
+                                                .eq('user_id', currentUser)
+                                                .eq('track_id', track['id'] as int) == 1) {
+                                              print('track est');
+                                              return;
+                                            } else {
+                                              usersTable.addUserTrack(currentUser, track['id']);
+                                            }
+                                          }, 
+                                          icon: Icon(CupertinoIcons.heart_fill, color: Colors.white)
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            _showPlaylistDialog(track['id']);
+                                          },
+                                          icon: Icon(Icons.playlist_add, color: Colors.white),
+                                        ),
                                       ],
                                     )
                                   ],

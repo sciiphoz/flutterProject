@@ -55,6 +55,8 @@ class UsersTable {
   }
 
   Future<void> addUserList(String listName, String userId) async {
+    print(userId);
+    print(listName);
     try {
       await _supabase.client.from('list').insert({
         'list_name':listName,
@@ -66,7 +68,18 @@ class UsersTable {
     }
   }
 
-  Future<void> addTrackToPlaylist(int listId, int trackId) async {
+  Future<void> deleteUserList(String listId) async {
+    try {
+      await _supabase.client.from('list').delete().eq('id', listId);
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future<void> addTrackToPlaylist(String listId, int trackId) async {
+    print(listId);
+    print(trackId);
     try {
       await _supabase.client.from('playlist').insert({
         'track_id':trackId,

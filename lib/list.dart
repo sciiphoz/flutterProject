@@ -34,8 +34,8 @@ class _ListPageState extends State<ListPage> {
 
   Future<void> getListTracks() async {
     try {
-      final response = await _supabase.from('playlist').select('id, track(name, author, image, musicUrl)')
-      .eq('id', _id_list as Object);
+      final response = await _supabase.from('playlist').select('list_id, track(name, author, image, musicUrl)')
+      .eq('list_id', _id_list as String);
       
       setState(() {
         tracks = response.map((item) {

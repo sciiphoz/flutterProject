@@ -1,8 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/list.dart';
+import 'package:flutter_player/database/users_table.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PlaylistPage extends StatefulWidget {
@@ -13,11 +13,13 @@ class PlaylistPage extends StatefulWidget {
 }
 
 class _PlaylistPageState extends State<PlaylistPage> {
-  final _supabase = Supabase.instance.client;
   List<Map<String, String>> lists = []; 
-  int currentTrackIndex = 0;
   bool isPlaying = true;
+  UsersTable usersTable = UsersTable();
+
+  final _supabase = Supabase.instance.client;
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _newPlaylistController = TextEditingController();
   final String currentUser = Supabase.instance.client.auth.currentUser!.id.toString();
 
   @override
@@ -44,6 +46,40 @@ class _PlaylistPageState extends State<PlaylistPage> {
       print('Ошибка загрузки треков: $e');
     }
   }
+
+  void _showAddPlaylistDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Новый плейлист'),
+          content: TextField(
+            controller: _newPlaylistController,
+            decoration: InputDecoration(
+              hintText: 'Введите название плейлиста',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Отмена'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Создать'),
+              onPressed: () {
+                usersTable.addUserList(_newPlaylistController.text, currentUser);
+                getLists();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   List<Map<String, String>> get filteredLists => lists
       .where((list) =>
@@ -72,25 +108,41 @@ class _PlaylistPageState extends State<PlaylistPage> {
           children: [
             Padding(
               padding: EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.2),
-                  hintText: 'Поиск по названию',
-                  hintStyle: TextStyle(color: Colors.white70),
-                  prefixIcon: Icon(Icons.search, color: Colors.white),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
+                        hintText: 'Поиск по названию',
+                        hintStyle: TextStyle(color: Colors.white70),
+                        prefixIcon: Icon(Icons.search, color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      ),
+                      style: TextStyle(color: Colors.white),
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                    ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                ),
-                style: TextStyle(color: Colors.white),
-                onChanged: (value) {
-                  setState(() {
-                  });
-                },
+                  SizedBox(width: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.add, color: Colors.white),
+                      onPressed: _showAddPlaylistDialog,
+                    ),
+                  ),
+                ],
               ),
             ),
             // Основной контент
@@ -137,16 +189,26 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
                                         alignment: Alignment.centerRight,
-                                        child: FilledButton(onPressed: () {
-                                            Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) => ListPage(
-                                                id_list: list['id']
-                                              )
-                                            )
-                                          );
-                                        }, child: Text("Прослушать")),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            FilledButton(onPressed: () {
+                                                Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder: (context) => ListPage(
+                                                    id_list: list['id']
+                                                  )
+                                                )
+                                              );
+                                            }, child: Text("Прослушать")),
+                                            IconButton(onPressed: () {
+                                              usersTable.deleteUserList(list['id']!);
+                                              getLists();
+                                              // Navigator.of(context).pop();
+                                            }, icon: Icon(Icons.delete))
+                                          ],
+                                        ),
                                       ),
                                     )
                                   ],
