@@ -87,56 +87,6 @@ class _FooterState extends State<Footer> {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   height: MediaQuery.of(context).size.height * 0.2,
-    //   padding: EdgeInsets.all(10),
-    //   decoration: BoxDecoration(
-    //     color: Colors.blueGrey.shade700,
-    //   ),
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(10.0),
-    //     child: ListTile(
-    //       onTap: () {
-    //         Navigator.push(
-    //           context,
-    //           CupertinoPageRoute(
-    //             builder: (context) => PlayerPage(
-    //               nameSound: _nameSound,
-    //               author: _nameSound,
-    //               urlMusic: _urlMusic,
-    //               urlPhoto: _urlMusic,
-    //             )
-    //           )
-    //         );
-    //       },
-    //       leading: Image.network(
-    //           _urlPhoto!,
-    //           height: MediaQuery.of(context).size.height * 0.2,
-    //           width: MediaQuery.of(context).size.width * 0.2,
-    //         ),
-    //       title: Slider(
-    //           min: 0,
-    //           max: _duration.inSeconds.toDouble(),
-    //           activeColor: Colors.blue,
-    //           inactiveColor: Colors.white,
-    //           value: _position.inSeconds.toDouble(),
-    //           onChanged: (value) async {
-    //             await audioPlayer.seek(Duration(seconds: value.toInt()));
-    //             setState(() {});
-    //           },
-    //         ),
-    //       subtitle: Text(_nameSound!),
-    //       trailing: IconButton(
-    //         color: Colors.white,
-    //         onPressed: playPause,
-    //         icon:
-    //             isPlaying
-    //                 ? Icon(Icons.pause_circle, size: 60)
-    //                 : Icon(Icons.play_circle, size: 60),
-    //       ),
-    //     ),
-    //   )
-    // );
     return Container(
       decoration: BoxDecoration(
         color: Colors.blueGrey.shade700,

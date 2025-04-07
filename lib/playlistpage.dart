@@ -205,7 +205,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                             IconButton(onPressed: () {
                                               usersTable.deleteUserList(list['id']!);
                                               getLists();
-                                              // Navigator.of(context).pop();
+                                              Navigator.of(context).popAndPushNamed('/playlists');
                                             }, icon: Icon(Icons.delete))
                                           ],
                                         ),

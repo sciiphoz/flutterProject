@@ -76,6 +76,7 @@ class _TrackPageState extends State<TrackPage> {
           title: Text('Ваши треки', style: TextStyle(color: Colors.white),),
           backgroundColor: Colors.transparent,
         ),
+        ///TODO sorting
         body: Column(
           children: [
             Padding(
@@ -97,6 +98,7 @@ class _TrackPageState extends State<TrackPage> {
                 style: TextStyle(color: Colors.white),
                 onChanged: (value) {
                   setState(() {
+                  
                   });
                 },
               ),
@@ -151,7 +153,6 @@ class _TrackPageState extends State<TrackPage> {
                                       ],
                                     ),
                                     Row(
-                                      
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ElevatedButton(onPressed: () {
@@ -167,10 +168,10 @@ class _TrackPageState extends State<TrackPage> {
                                             )
                                           );
                                         }, child: Text("Прослушать")),
-                                        IconButton(onPressed: () async {
+                                        IconButton(onPressed: () {
                                             usersTable.deleteUserTrack(track['id']);
+                                            Navigator.of(context).popAndPushNamed('/tracks');
                                             setState(() {
-                                              tracks = tracks;
                                             });
                                         }, icon: Icon(CupertinoIcons.heart_fill, color: Colors.white,))
                                       ],
