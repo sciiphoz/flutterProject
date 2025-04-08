@@ -2,39 +2,26 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_player/music/player.dart';
+import 'package:provider/provider.dart';
 
 class Footer extends StatefulWidget {
-  String? urlMusic;
-  String? urlPhoto;
-  String? nameSound;
-  String? author;
-  Footer({
-    super.key,
-    this.urlMusic,
-    this.urlPhoto,
-    this.nameSound,
-    this.author,
-  });
+  const Footer({super.key});
 
   @override
   State<Footer> createState() => _FooterState();
 }
 
 class _FooterState extends State<Footer> {
-  String? _urlMusic;
-  String? _urlPhoto;
-  String? _nameSound;
-  String? _author;
-  bool isPlaying = false;
   late final AudioPlayer audioPlayer;
-  late final UrlSource urlSource;
+  bool isPlaying = false;
   Duration _duration = Duration();
   Duration _position = Duration();
+  UrlSource? urlSource;
 
-  Future initPlayer() async {
+  @override
+  void initState() {
+    super.initState();
     audioPlayer = AudioPlayer();
-
-    urlSource = UrlSource(_urlMusic!);
 
     audioPlayer.onDurationChanged.listen((duration) {
       setState(() {
@@ -42,41 +29,18 @@ class _FooterState extends State<Footer> {
       });
     });
 
-    /// Позиция песни
     audioPlayer.onPositionChanged.listen((position) {
       setState(() {
         _position = position;
       });
     });
-    // Чтобы завершалась
-    audioPlayer.onPlayerComplete.listen((comleted) {
+
+    audioPlayer.onPlayerComplete.listen((_) {
       setState(() {
         _position = _duration;
-        // isPlaying = !isPlaying;
+        isPlaying = false;
       });
     });
-  }
-
-  void playPause() async {
-    if (isPlaying) {
-      audioPlayer.pause();
-      isPlaying = false;
-    } else {
-      audioPlayer.play(urlSource);
-      isPlaying = true;
-    }
-    setState(() {});
-  }
-
-  // Инициализация
-  @override
-  void initState() {
-    _urlPhoto = widget.urlPhoto;
-    _urlMusic = widget.urlMusic;
-    _author = widget.author;
-    _nameSound = widget.nameSound;
-    initPlayer();
-    super.initState();
   }
 
   @override
@@ -85,71 +49,122 @@ class _FooterState extends State<Footer> {
     super.dispose();
   }
 
+  void playPause() async {
+    final playerService = Provider.of<PlayerService>(context, listen: false);
+    
+    if (isPlaying) {
+      await audioPlayer.pause();
+      isPlaying = false;
+    } else {
+      if (urlSource == null && playerService.currentMusicUrl != null) {
+        urlSource = UrlSource(playerService.currentMusicUrl!);
+      }
+      if (urlSource != null) {
+        await audioPlayer.play(urlSource!);
+        isPlaying = true;
+      }
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    final playerService = Provider.of<PlayerService>(context);
+
+    if (playerService.currentTrackName == null) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.blueGrey.shade700,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         child: ListTile(
           onTap: () {
             Navigator.push(
               context,
               CupertinoPageRoute(
                 builder: (context) => PlayerPage(
-                  nameSound: _nameSound,
-                  author: _nameSound,
-                  urlMusic: _urlMusic,
-                  urlPhoto: _urlPhoto,
-                )
-              )
+                  nameSound: playerService.currentTrackName!,
+                  author: playerService.currentArtist!,
+                  urlMusic: playerService.currentMusicUrl!,
+                  urlPhoto: playerService.currentImageUrl!,
+                ),
+              ),
             );
           },
           leading: Image.network(
-              _urlPhoto!,
-            ),
+            playerService.currentImageUrl!,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
           title: SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
             child: Slider(
-                min: 0,
-                max: _duration.inSeconds.toDouble(),
-                activeColor: Colors.blue,
-                inactiveColor: Colors.white,
-                value: _position.inSeconds.toDouble(),
-                onChanged: (value) async {
-                  await audioPlayer.seek(Duration(seconds: value.toInt()));
-                  setState(() {});
-                },
-              ),
+              min: 0,
+              max: _duration.inSeconds.toDouble(),
+              activeColor: Colors.blue,
+              inactiveColor: Colors.white,
+              value: _position.inSeconds.toDouble(),
+              onChanged: (value) async {
+                await audioPlayer.seek(Duration(seconds: value.toInt()));
+                setState(() {});
+              },
+            ),
           ),
-          subtitle: Text(_nameSound!),
+          subtitle: Text(
+            playerService.currentTrackName!,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: IconButton(
             color: Colors.white,
             onPressed: playPause,
-            icon:
-                isPlaying
-                    ? Icon(Icons.pause_circle, size: MediaQuery.of(context).size.height * 0.04,)
-                    : Icon(Icons.play_circle, size: MediaQuery.of(context).size.height * 0.04,),
+            icon: isPlaying
+                ? Icon(
+                    Icons.pause_circle,
+                    size: MediaQuery.of(context).size.height * 0.04,
+                  )
+                : Icon(
+                    Icons.play_circle,
+                    size: MediaQuery.of(context).size.height * 0.04,
+                  ),
           ),
         ),
-      )
+      ),
     );
-
   }
 }
 
-extension on Duration {
-  String format(Duration duration) {
-    String minutes = duration.inMinutes
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
-    String seconds = duration.inSeconds
-        .remainder(60)
-        .toString()
-        .padLeft(2, '0');
-    return "$minutes:$seconds";
+class PlayerService extends ChangeNotifier {
+  AudioPlayer? _audioPlayer;
+  String? currentTrackName;
+  String? currentArtist;
+  String? currentMusicUrl;
+  String? currentImageUrl;
+  bool isPlaying = false;
+  Duration position = Duration.zero;
+
+  bool get hasActivePlayer => _audioPlayer != null;
+
+  void initPlayer(
+    String name,
+    String artist,
+    String musicUrl,
+    String imageUrl, {
+    bool isPlaying = false,
+    Duration position = Duration.zero,
+  }) {
+    currentTrackName = name;
+    currentArtist = artist;
+    currentMusicUrl = musicUrl;
+    currentImageUrl = imageUrl;
+    isPlaying = isPlaying;
+    position = position;
+    
+    _audioPlayer ??= AudioPlayer();
+    notifyListeners();
   }
 }

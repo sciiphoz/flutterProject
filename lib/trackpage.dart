@@ -55,7 +55,8 @@ class _TrackPageState extends State<TrackPage> {
 
   List<Map<String, dynamic>> get filteredTracks => tracks
       .where((track) =>
-          track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()))
+          track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()) ||
+          track['name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
       .toList();
 
   @override
@@ -76,31 +77,36 @@ class _TrackPageState extends State<TrackPage> {
           title: Text('Ваши треки', style: TextStyle(color: Colors.white),),
           backgroundColor: Colors.transparent,
         ),
-        ///TODO sorting
+        
         body: Column(
           children: [
             Padding(
               padding: EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.2),
-                  hintText: 'Поиск по названию или исполнителю',
-                  hintStyle: TextStyle(color: Colors.white70),
-                  prefixIcon: Icon(Icons.search, color: Colors.white),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextField(
+                  controller: _searchController,
+                  style: TextStyle(color: Colors.blueGrey[600]),
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    filled: true,
+                    hintText: 'Поиск по названию или исполнителю',
+                    prefixIcon: Icon(Icons.search, color: Colors.blueGrey[600]),
+                    labelStyle: TextStyle(color: Colors.blueGrey[600]),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      borderSide: BorderSide(color: Colors.white)
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      borderSide: BorderSide(color: Colors.white)
+                    )
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                  onChanged: (value) {
+                    setState(() {
+                    });
+                  },
                 ),
-                style: TextStyle(color: Colors.white),
-                onChanged: (value) {
-                  setState(() {
-                  
-                  });
-                },
               ),
             ),
             // Основной контент
@@ -191,10 +197,7 @@ class _TrackPageState extends State<TrackPage> {
           ],
         ),
         bottomNavigationBar: Footer(
-          nameSound: 'Четыре сезона: Лето',
-          author: 'Антонио Вивальди',
-          urlMusic: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music/Yolanda_Kondonassis_Rudolf_Werthen_I_Fiamminghi_The_Orchestra_of_Flanders_Antonio_Vivaldi_-_Vivaldi_The_Four_Seasons_Violin_Concerto_in_G_Minor_Op_8_No_2_RV_315_Summer_-_I_Allegro_non_molto_Arr_Y_Kondonassis_R_Wer.mp3',
-          urlPhoto: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music_photos/summer.png',
+
         ),
       ),
     );

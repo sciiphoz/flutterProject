@@ -76,26 +76,33 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Добавить в плейлист'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: lists.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(lists[index]['list_name']!, style: TextStyle(color: Colors.black),),
-                  onTap: () {
-                    usersTable.addTrackToPlaylist(lists[index]['id']!, trackId);
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
+          backgroundColor: Colors.blue,
+          title: Text('Добавить в плейлист', style: TextStyle(color: Colors.white),),
+          content: Container(
+            decoration:BoxDecoration(
+              color: Colors.blue[600],
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: lists.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(lists[index]['list_name']!, style: TextStyle(color: Colors.white),),
+                    onTap: () {
+                      usersTable.addTrackToPlaylist(lists[index]['id']!, trackId);
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Отмена', style: TextStyle(color: Colors.black),),
+              child: Text('Отмена', style: TextStyle(color: Colors.white),),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -109,7 +116,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Map<String, dynamic>> get filteredTracks => tracks
     .where((track) =>
-        track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()))
+      track['author']!.toLowerCase().contains(_searchController.text.toLowerCase()) ||
+      track['name']!.toLowerCase().contains(_searchController.text.toLowerCase()))
     .toList();
 
   @override
@@ -139,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(
                     filled: true,
                     prefixIcon: Icon(Icons.search, color: Colors.blueGrey[600]),
-                    labelText: 'Поиск',
+                    labelText: 'Поиск по названию или исполнителю',
                     labelStyle: TextStyle(color: Colors.blueGrey[600]),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -278,10 +286,7 @@ class _HomePageState extends State<HomePage> {
           title: Text("Главная", style: TextStyle(color: Colors.white),),
         ),
         bottomNavigationBar: Footer(
-          nameSound: 'Четыре сезона: Лето',
-          author: 'Антонио Вивальди',
-          urlMusic: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music/Yolanda_Kondonassis_Rudolf_Werthen_I_Fiamminghi_The_Orchestra_of_Flanders_Antonio_Vivaldi_-_Vivaldi_The_Four_Seasons_Violin_Concerto_in_G_Minor_Op_8_No_2_RV_315_Summer_-_I_Allegro_non_molto_Arr_Y_Kondonassis_R_Wer.mp3',
-          urlPhoto: 'https://rjnwjeopknvsrqsetrsf.supabase.co/storage/v1/object/public/storages/music_photos/summer.png',
+
         ), 
         drawer: DrawerPage(),
       ),

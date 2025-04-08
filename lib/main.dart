@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_player/footer.dart';
 import 'package:flutter_player/landing.dart';
 import 'package:flutter_player/music/player.dart';
 import 'package:flutter_player/playlistpage.dart';
-import 'package:flutter_player/profile.dart';
 import 'package:flutter_player/recovery.dart';
 import 'package:flutter_player/auth.dart';
 import 'package:flutter_player/reg.dart';
 import 'package:flutter_player/home.dart';
 import 'package:flutter_player/trackpage.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -17,7 +18,12 @@ Future<void> main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqbndqZW9wa252c3Jxc2V0cnNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzODAyMTksImV4cCI6MjA1NTk1NjIxOX0.Pya-1YGfYitWolWGAhs9a50LjqTdKbAKzt5WCCxXEkA',
   );
 
-  runApp(const AppTheme());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => PlayerService(),
+      child: const AppTheme()
+    )
+  );
 }
 
 class AppTheme extends StatelessWidget {
@@ -64,7 +70,6 @@ class AppTheme extends StatelessWidget {
         '/tracks': (context) => TrackPage(),
         '/playlists': (context) => PlaylistPage(),
         '/player': (context) => PlayerPage(),
-        '/profile': (context) => ProfilePage(),
       }
     );
   }
