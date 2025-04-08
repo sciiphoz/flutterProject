@@ -119,7 +119,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         cursorColor: Colors.white,
                         decoration: InputDecoration(
                           filled: true,
-                          hintText: 'Поиск по названию или исполнителю',
+                          hintText: 'Поиск по названию',
                           prefixIcon: Icon(Icons.search, color: Colors.blueGrey[600]),
                           labelStyle: TextStyle(color: Colors.blueGrey[600]),
                           focusedBorder: OutlineInputBorder(
@@ -169,7 +169,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                           children: filteredLists.map((list) {
                             return SizedBox(
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(200, 0, 200, 0),
+                                padding: EdgeInsets.fromLTRB(200, 0, 200, 0),
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
@@ -182,7 +182,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8.0),
                                       child: Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
@@ -193,13 +193,14 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: EdgeInsets.all(8.0),
                                       child: Container(
                                         alignment: Alignment.centerRight,
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                            FilledButton(onPressed: () {
+                                            ElevatedButton(
+                                              onPressed: () {
                                                 Navigator.push(
                                                 context,
                                                 CupertinoPageRoute(
